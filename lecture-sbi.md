@@ -120,7 +120,7 @@ Take the bean machine example.
 
 class: middle
 
-.width-100[![](figures/process1.png)]
+.width-100[![](figures/sbi/process1.png)]
 
 ???
 
@@ -131,7 +131,7 @@ generation: pencil and paper calculable from first principles
 count: false
 class: middle
 
-.width-100[![](figures/process2.png)]
+.width-100[![](figures/sbi/process2.png)]
 
 ???
 
@@ -142,7 +142,7 @@ parton shower + hadronization: controlled approximation of first principles + ph
 count: false
 class: middle
 
-.width-100[![](figures/process3.png)]
+.width-100[![](figures/sbi/process3.png)]
 
 ???
 
@@ -153,7 +153,7 @@ detector simulation: interaction with the materials and digitization
 count: false
 class: middle
 
-.width-100[![](figures/process4.png)]
+.width-100[![](figures/sbi/process4.png)]
 
 ???
 
@@ -200,7 +200,7 @@ count: false
 
 class: middle
 
-.avatars[![](figures/faces/kyle.png)![](figures/faces/johann.png)]
+.avatars[![](figures/sbi/faces/kyle.png)![](figures/sbi/faces/johann.png)]
 
 .center.width-100[![](./figures/sbi/frontiers-sbi0.png)]
 
@@ -225,7 +225,7 @@ class: middle
 
 class: middle
 
-.avatars[![](figures/faces/kyle.png)![](figures/faces/johann.png)]
+.avatars[![](figures/sbi/faces/kyle.png)![](figures/sbi/faces/johann.png)]
 
 .center.width-100[![](./figures/sbi/frontiers-sbi2.png)]
 
@@ -236,7 +236,7 @@ class: middle
 class: middle
 count: false
 
-.avatars[![](figures/faces/kyle.png)![](figures/faces/johann.png)]
+.avatars[![](figures/sbi/faces/kyle.png)![](figures/sbi/faces/johann.png)]
 
 .center.width-100[![](./figures/sbi/frontiers-sbi.png)]
 
@@ -246,7 +246,7 @@ count: false
 
 # Neural ratio estimation 
 
-.avatars[![](figures/faces/kyle.png)![](figures/faces/joeri.png)![](figures/faces/johann.png)]
+.avatars[![](figures/sbi/faces/kyle.png)![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/johann.png)]
 
 <br>
 The likelihood-to-evidence $r(x|\theta) = \frac{p(x|\theta)}{p(x)} = \frac{p(x, \theta)}{p(x)p(\theta)}$ ratio can be learned, even if neither the likelihood nor the evidence can be evaluated:
@@ -275,7 +275,7 @@ $\hat{r}(x|\theta)$]
 
 class: middle
 
-.avatars[![](figures/faces/kyle.png)![](figures/faces/joeri.png)![](figures/faces/johann.png)]
+.avatars[![](figures/sbi/faces/kyle.png)![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/johann.png)]
 
 The solution $d$ found after training  approximates the optimal classifier
 $$d(x, \theta) \approx d^\*(x, \theta) = \frac{p(x, \theta)}{p(x, \theta)+p(x)p(\theta)}.$$
@@ -289,7 +289,7 @@ Derive on blackboard.
 
 class: middle
 
-.avatars[![](figures/faces/kyle.png)![](figures/faces/joeri.png)![](figures/faces/johann.png)]
+.avatars[![](figures/sbi/faces/kyle.png)![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/johann.png)]
 
 .center.width-100[![](./figures/sbi/carl.png)]
 
@@ -301,7 +301,7 @@ background-image: url(./figures/sbi/stellar.jpeg)
 background-position: left
 class: black-slide
 
-.avatars[![](figures/faces/joeri.png)![](figures/faces/nil.jpg)![](figures/faces/christoph.jpg)![](figures/faces/gf.jpg)]
+.avatars[![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/nil.jpg)![](figures/sbi/faces/christoph.jpg)![](figures/sbi/faces/gf.jpg)]
 
 .smaller-x[ ]
 ## Constraining dark matter with stellar streams 
@@ -319,7 +319,7 @@ class: black-slide
 
 class: middle
 
-.avatars[![](figures/faces/joeri.png)![](figures/faces/nil.jpg)![](figures/faces/christoph.jpg)![](figures/faces/gf.jpg)]
+.avatars[![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/nil.jpg)![](figures/sbi/faces/christoph.jpg)![](figures/sbi/faces/gf.jpg)]
 
 .center.width-90[![](./figures/sbi/dm1.png)]
 
@@ -389,7 +389,7 @@ class: middle, black-slide
 
 class: middle
 
-.avatars[![](figures/faces/malavika.jpg)![](figures/faces/francois.jpg)![](figures/faces/absil.jpg)]
+.avatars[![](figures/sbi/faces/malavika.jpg)![](figures/sbi/faces/francois.jpg)![](figures/sbi/faces/absil.jpg)]
 
 .center[
 .width-25[![](./figures/sbi/exoplanet-residuals.png)]
@@ -417,7 +417,7 @@ $$\hat{p}(\theta|x) = \text{sbi}(p(x | \theta), p(\theta), x)$$
 We must make sure our approximate simulation-based inference algorithms can (at least) actually realize faithful inferences on the (expected) observations.
 
 ]
-.kol-1-2[.center.width-80[![](figures/exoplanet-corner.png)]
+.kol-1-2[.center.width-80[![](figures/sbi/exoplanet-corner.png)]
 
 .center.italic[How do we know this is good enough?]]
 ]
@@ -426,7 +426,7 @@ We must make sure our approximate simulation-based inference algorithms can (at 
 
 class: middle
 
-.avatars[![](figures/faces/kyle.png)![](figures/faces/johann.png)![](figures/faces/siddarth.png)![](figures/faces/joeri.png)]
+.avatars[![](figures/sbi/faces/kyle.png)![](figures/sbi/faces/johann.png)![](figures/sbi/faces/siddarth.png)![](figures/sbi/faces/joeri.png)]
 
 ## Mode convergence
 
@@ -436,7 +436,7 @@ $$\begin{aligned}
 =& \lim\_{N \to \infty} \arg\max\_\theta p(\theta) \prod\_{x\_i} r(x\_i | \theta) = \theta^\*
 \end{aligned}$$
 
-.center.width-100[![](figures/dm-posterior.gif)]
+.center.width-100[![](figures/sbi/dm-posterior.gif)]
 
 .footnote[Credits: [Brehmer et al](https://iopscience.iop.org/article/10.3847/1538-4357/ab4c41/meta), 2019.]
 
@@ -444,7 +444,7 @@ $$\begin{aligned}
 
 class: middle
 
-.avatars[![](figures/faces/joeri.png)![](figures/faces/arnaud.jpg)![](figures/faces/francois.jpg)![](figures/faces/antoine.png)]
+.avatars[![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/arnaud.jpg)![](figures/sbi/faces/francois.jpg)![](figures/sbi/faces/antoine.png)]
 
 .grid[
 .kol-2-3[
@@ -467,11 +467,11 @@ class: middle
 
 class: middle
 
-.avatars[![](figures/faces/joeri.png)![](figures/faces/arnaud.jpg)![](figures/faces/francois.jpg)![](figures/faces/antoine.png)]
+.avatars[![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/arnaud.jpg)![](figures/sbi/faces/francois.jpg)![](figures/sbi/faces/antoine.png)]
 
 <br>
 
-.center.width-90[![](figures/coverage-crisis.png)]
+.center.width-90[![](figures/sbi/coverage-crisis.png)]
 
 .footnote[Credits: [Hermans et al](https://arxiv.org/abs/2110.06581), 2021.]
 
@@ -491,7 +491,7 @@ What if diagnostics fail?
 
 # Balanced NRE
 
-.avatars[![](figures/faces/joeri.png)![](figures/faces/arnaud.jpg)![](figures/faces/francois.jpg)![](figures/faces/antoine.png)]
+.avatars[![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/arnaud.jpg)![](figures/sbi/faces/francois.jpg)![](figures/sbi/faces/antoine.png)]
 
 Enforce neural ratio estimation to be .bold[conservative] by using binary classifiers $\hat{d}$ that are balanced, i.e. such that
 $$
@@ -500,7 +500,7 @@ $$
 
 <br>
 
-.center.width-100[![](figures/mainbnre1.png)]
+.center.width-100[![](figures/sbi/mainbnre1.png)]
 
 .footnote[Credits: [Delaunoy et al](https://arxiv.org/abs/2208.13624), 2022.]
 
@@ -508,9 +508,9 @@ $$
 
 class: middle
 
-.avatars[![](figures/faces/joeri.png)![](figures/faces/arnaud.jpg)![](figures/faces/francois.jpg)![](figures/faces/antoine.png)]
+.avatars[![](figures/sbi/faces/joeri.png)![](figures/sbi/faces/arnaud.jpg)![](figures/sbi/faces/francois.jpg)![](figures/sbi/faces/antoine.png)]
 
-.center.width-105[![](figures/bnre-effect.png)]
+.center.width-105[![](figures/sbi/bnre-effect.png)]
 
 .footnote[Credits: [Delaunoy et al](https://arxiv.org/abs/2208.13624), 2022.]
 
