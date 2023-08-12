@@ -1,6 +1,9 @@
 class: middle, center, title-slide
 
 # Deep generative models
+.italic[A latent variable model perspective]
+
+<br>
 
 51st SLAC Summer Institute
 
@@ -725,8 +728,6 @@ $$\log p(\mathbf{x}) = \log p(\mathbf{z}(0)) - \int\_0^1 \text{Tr} \left( \frac{
 ---
 
 class: middle
-
-
 
 ## Probability flow ODE
 

@@ -2,6 +2,8 @@ class: middle, center, title-slide
 
 # An introduction to<br>simulation-based inference
 
+<br>
+
 51st SLAC Summer Institute
 
 August 16, 2023
