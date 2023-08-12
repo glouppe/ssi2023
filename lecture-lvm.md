@@ -16,10 +16,9 @@ Gilles Louppe<br>
 # Outline
 
 - Deep generative models
-- Variational inference
 - Variational auto-encoders
-- Hierarchical variational auto-encoders
-- Variational diffusion models
+- Diffusion models
+- Normalizing flows
 
 ---
 
@@ -32,25 +31,43 @@ class: middle
 
 class: middle
 
-.grid[
-.kol-1-3[.circle.width-95[![](figures/lec11/lecun.jpg)]]
-.kol-2-3[.width-100[![](figures/lec11/cake.png)]]
-]
+## Generative models
 
-.italic["We need tremendous amount of information to build machines that have common sense and generalize."]
+A (deep) **generative model** is a probabilistic model $p\_\theta$ that can be used as a simulator of the data. 
+Formally, a generative model defines a probability distribution $p\_\theta(\mathbf{x})$ over the data $\mathbf{x} \in \mathcal{X}$, parameterized by $\theta$. 
 
-.pull-right[Yann LeCun, 2016.]
+.center.width-70[![](figures/lec11/distribution.png)]
+
+???
+
+Our goal is to learn $\theta$ to match the (unknown) data distribution $p(\mathbf{x})$.
 
 ---
 
 class: middle
 
-## Generative models
+.grid[
+.kol-1-2.center[
+.width-80[![](figures/lec11/vae-faces.png)]
+]
+.kol-1-2.center[
+<br>
+.width-75[![](figures/lec12/pope.jpg)]
+]
+]
+.grid[
+.kol-1-2.center[
 
-A **generative model** is a probabilistic model $p$ that can be used as a simulator of the data.
-Its purpose is to generate synthetic but realistic high-dimensional data
-$$\mathbf{x} \sim p\_\theta(\mathbf{x}),$$
-that is as close as possible from the unknown data distribution $p(\mathbf{x})$, but for which we have empirical samples.
+Variational auto-encoders<br> (Kingma and Welling, 2013)
+
+]
+.kol-1-2.center[
+
+Diffusion models<br>
+(Midjourney, 2023)
+
+]
+]
 
 ---
 
@@ -58,121 +75,119 @@ class: black-slide
 background-image: url(./figures/landscape.png)
 background-size: contain
 
-.footnote[Credits: [Karsten et al](https://cvpr2022-tutorial-diffusion-models.github.io/), 2022.]
+.footnote[Credits: [Karsten et al](https://cvpr2022-tutorial-diffusion-models.github.io/), 2022; [Siddharth Mishra-Sharma](https://smsharma.io/iaifi-summer-school-2023/), 2023.]
 
 ---
 
 class: middle
 
-## Content generation
+## Simulators
 
-.center[.width-45[![](./figures/lec12/content-generation-1.png)] .width-45[![](./figures/lec12/content-generation-2.png)]]
+A simulator prescribes a generative model that can be used to simulate data $\mathbf{x}$.
 
-.center[Diffusion models have emerged as powerful generative models, beating previous state-of-the-art models (such as GANs) on a variety of tasks.]
+.center.width-100[![](figures/lec11/simulators.png)]
 
-.footnote[Credits: [Dhariwal and Nichol](https://arxiv.org/pdf/2105.05233.pdf), 2021; [Ho et al](https://arxiv.org/pdf/2106.15282.pdf), 2021.]
-
----
-
-class: middle
-
-## Image super-resolution
-
-.center[
-
-<video autoplay muted loop width="720" height="420">
-     <source src="./figures/lec12/super-resolution.m4v" type="video/mp4">
-</video>
-
-]
-
-.footnote[Credits: [Saharia et al](https://arxiv.org/abs/2104.07636), 2021.]
+.footnote[Credits: [Siddharth Mishra-Sharma](https://smsharma.io/iaifi-summer-school-2023/), 2023.]
 
 ---
 
 class: middle
 
-## Compression
+## Conditional simulators
 
-.center[
-.width-90[![](figures/lec11/generative-compression.png)]
+A conditional simulator prescribes a way to sample from the likelihood $p(\mathbf{x}|\theta)$, where $\theta$ is a set of conditioning variables or parameters.
 
-Hierarchical .bold[compression of images and other data],<br> e.g., in video conferencing systems (Gregor et al, 2016).
-]
+.center.width-100[![](figures/lec11/simulators-conditional.png)]
 
----
-
-class: middle
-
-## Text-to-image generation
-
-.center[
-
-.width-50[![](./figures/lec12/text-to-image.png)]
-
-.italic[A group of teddy bears in suite in a corporate office celebrating<br> the birthday of their friend. There is a pizza cake on the desk.]
-
-]
-
-.footnote[Credits: [Saharia et al](https://arxiv.org/abs/2205.11487), 2022.]
-
----
-
-class: middle, black-slide
-
-.center.width-50[![](./figures/lec12/pope.jpg)]
-
-.center[... or deepfakes.]
+.footnote[Credits: [Siddharth Mishra-Sharma](https://smsharma.io/iaifi-summer-school-2023/), 2023.]
 
 ---
 
 class: middle
 
-## Artistic tools and image editing
+$$p(z\_p|\theta)$$
 
-.center.width-100[![](./figures/lec12/sde-edit.jpg)]
+.width-100[![](figures/sbi/process1.png)]
 
-.footnote[Credits: [Meng et al](https://arxiv.org/abs/2108.01073), 2021.]
+???
 
----
-
-class: middle
-
-## Voice conversion
-
-.center[
-
-.width-80[![](figures/lec11/vae-styletransfer.jpg)]
-
-.bold[Voice style transfer] [[demo](https://avdnoord.github.io/homepage/vqvae/)] (van den Oord et al, 2017).
-]
-
----
-
-class: middle
-
-## Inverse problems in medical imaging
-
-.center.width-100[![](./figures/lec12/inverse-problems.png)]
-
-.footnote[Credits: [Song et al](https://arxiv.org/pdf/2111.08005.pdf), 2021.]
-
----
-
-class: middle
-
-## Drug discovery
-
-.center.width-100[![](figures/lec11/bombarelli.jpeg)]
-
-.center[Design of new molecules with desired chemical properties<br> (Gomez-Bombarelli et al, 2016).]
+generation: pencil and paper calculable from first principles
 
 ---
 
 count: false
 class: middle
 
-# Variational inference
+$$p(z\_s|\theta) = \int p(z\_p|\theta) p(z\_s | z\_p) dz\_p$$
+
+.width-100[![](figures/sbi/process2.png)]
+
+???
+
+parton shower + hadronization: controlled approximation of first principles + phenomenological model
+
+---
+
+count: false
+class: middle
+
+$$p(z\_d|\theta) = \iint p(z\_p|\theta) p(z\_s | z\_p) p(z\_d | z\_s) dz\_p dz\_s$$
+
+.width-100[![](figures/sbi/process3.png)]
+
+???
+
+detector simulation: interaction with the materials and digitization
+
+---
+
+count: false
+class: middle
+
+$$p(x|\theta) = \iiint p(z\_p|\theta) p(z\_s | z\_p) p(z\_d | z\_s) p(x|z\_d) dz\_p dz\_s dx$$
+
+.width-100[![](figures/sbi/process4.png)]
+
+???
+
+reconstruction simulation
+
+---
+
+class: middle
+
+## What can we do with generative models?
+
+.grid[
+.kol-1-3.center[
+
+Produce samples $$\mathbf{x} \sim p(\mathbf{x} | \theta)$$
+
+]
+.kol-1-3.center[
+Evaluate densities $$p(\mathbf{x}|\theta)$$ $$p(\theta | \mathbf{x}) = \frac{p(\mathbf{x} | \theta) p(\theta)}{p(\mathbf{x})}$$
+
+]
+.kol-1-3.center[
+Encode complex priors $$p(\mathbf{x})$$
+
+]
+]
+
+.grid[
+.kol-1-3.center[.width-100[![](figures/lec11/uses1.png)]]
+.kol-1-3.center[.width-100[![](figures/lec11/uses2.png)]]
+.kol-1-3.center[.width-90[![](figures/lec11/uses3.png)]]
+]
+
+.footnote[Credits: [Siddharth Mishra-Sharma](https://smsharma.io/iaifi-summer-school-2023/), 2023.]
+
+---
+
+count: false
+class: middle
+
+# Variational auto-encoders
 
 ---
 
@@ -183,6 +198,9 @@ class: middle
 .center.width-20[![](figures/lec11/latent-model.svg)]
 
 Consider for now a **prescribed latent variable model** that relates a set of observable variables $\mathbf{x} \in \mathcal{X}$ to a set of unobserved variables $\mathbf{z} \in \mathcal{Z}$.
+
+The probabilistic model defines a joint probability distribution $p\_\theta(\mathbf{x}, \mathbf{z})$, which decomposes as
+$$p\_\theta(\mathbf{x}, \mathbf{z}) = p\_\theta(\mathbf{x}|\mathbf{z}) p(\mathbf{z}).$$
 
 ???
 
@@ -202,12 +220,8 @@ class: middle, black-slide
   <source src="./figures/lec11/galton.mp4" type="video/mp4">
 </video>]
 
----
+???
 
-class: middle
-
-The probabilistic model defines a joint probability distribution $p\_\theta(\mathbf{x}, \mathbf{z})$, which decomposes as
-$$p\_\theta(\mathbf{x}, \mathbf{z}) = p\_\theta(\mathbf{x}|\mathbf{z}) p(\mathbf{z}).$$
 If we interpret $\mathbf{z}$ as causal factors for the high-dimension representations $\mathbf{x}$, then
 sampling from $p\_\theta(\mathbf{x}|\mathbf{z})$ can be interpreted as **a stochastic generating process** from $\mathcal{Z}$ to $\mathcal{X}$.
 
@@ -271,13 +285,6 @@ $$\theta^{\*}, \phi^{\*} = \arg \max\_{\theta,\phi} \text{ELBO}(\mathbf{x};\thet
 
 ---
 
-count: false
-class: middle
-
-# Variational auto-encoders
-
----
-
 class: middle
 
 .center[![](figures/lec12/diagram-vae.svg)]
@@ -292,6 +299,10 @@ We will also amortize the inference process by learning a second neural network 
 class: middle
 
 ## Variational auto-encoders
+
+.center.width-80[![](figures/lec11/vae-architecture.png)]
+
+???
 
 A variational auto-encoder is a deep latent variable model where:
 - The prior $p(\mathbf{z})$ is prescribed, and usually chosen to be Gaussian.
@@ -333,54 +344,7 @@ class: middle
 
 Consider as data $\mathbf{d}$ the MNIST digit dataset:
 
-.center.width-100[![](figures/lec11/mnist.png)]
-
----
-
-class: middle
-
-.italic[Generative network:]
-$$\begin{aligned}
-\mathbf{z} &\in \mathbb{R}^d \\\\
-p(\mathbf{z}) &= \mathcal{N}(\mathbf{z}; \mathbf{0},\mathbf{I})\\\\
-p\_\theta(\mathbf{x}|\mathbf{z}) &= \mathcal{N}(\mathbf{x};\mu(\mathbf{z};\theta), \sigma^2(\mathbf{z};\theta)\mathbf{I}) \\\\
-\mu(\mathbf{z};\theta) &= \mathbf{W}\_2^T\mathbf{h} + \mathbf{b}\_2 \\\\
-\log \sigma^2(\mathbf{z};\theta) &= \mathbf{W}\_3^T\mathbf{h} + \mathbf{b}\_3 \\\\
-\mathbf{h} &= \text{ReLU}(\mathbf{W}\_1^T \mathbf{z} + \mathbf{b}\_1)\\\\
-\theta &= \\\{ \mathbf{W}\_1, \mathbf{b}\_1, \mathbf{W}\_2, \mathbf{b}\_2, \mathbf{W}\_3, \mathbf{b}\_3 \\\}
-\end{aligned}$$
-
----
-
-class: middle
-
-.italic[Inference network:]
-$$\begin{aligned}
-q\_\phi(\mathbf{z}|\mathbf{x}) &=  \mathcal{N}(\mathbf{z};\mu(\mathbf{x};\phi), \sigma^2(\mathbf{x};\phi)\mathbf{I}) \\\\
-p(\epsilon) &= \mathcal{N}(\epsilon; \mathbf{0}, \mathbf{I}) \\\\
-\mathbf{z} &= \mu(\mathbf{x};\phi) + \sigma(\mathbf{x};\phi) \odot \epsilon \\\\
-\mu(\mathbf{x};\phi) &= \mathbf{W}\_5^T\mathbf{h} + \mathbf{b}\_5 \\\\
-\log \sigma^2(\mathbf{x};\phi) &= \mathbf{W}\_6^T\mathbf{h} + \mathbf{b}\_6 \\\\
-\mathbf{h} &= \text{ReLU}(\mathbf{W}\_4^T \mathbf{x} + \mathbf{b}\_4)\\\\
-\phi &= \\\{ \mathbf{W}\_4, \mathbf{b}\_4, \mathbf{W}\_5, \mathbf{b}\_5, \mathbf{W}\_6, \mathbf{b}\_6 \\\}
-\end{aligned}$$
-
-Note that there is no restriction on the generative and inference network architectures.
-
----
-
-class: middle
-
-Using the reparameterization trick, the objective can be expressed as:
-$$\begin{aligned}
-& \mathbb{E}\_{p(\mathbf{x})}\left[ \text{ELBO}(\mathbf{x};\theta,\phi) \right] \\\\
-&= \mathbb{E}\_{p(\mathbf{x})}\left[ \mathbb{E}\_{q\_\phi(\mathbf{z}|\mathbf{x})} \left[ \log p\_\theta(\mathbf{x}|\mathbf{z}) \right] - \text{KL}(q\_\phi(\mathbf{z}|\mathbf{x}) || p(\mathbf{z})) \right] \\\\
-&= \mathbb{E}\_{p(\mathbf{x})}\left[ \mathbb{E}\_{p(\epsilon)} \left[  \log p(\mathbf{x}|\mathbf{z}=g(\phi,\mathbf{x},\epsilon);\theta) \right] - \text{KL}(q\_\phi(\mathbf{z}|\mathbf{x}) || p(\mathbf{z})) \right]
-\end{aligned}
-$$
-where the negative KL divergence can be expressed  analytically as
-$$-\text{KL}(q\_\phi(\mathbf{z}|\mathbf{x}) || p(\mathbf{z})) = \frac{1}{2} \sum\_{j=1}^d \left( 1 + \log(\sigma\_j^2(\mathbf{x};\phi)) - \mu\_j^2(\mathbf{x};\phi) - \sigma\_j^2(\mathbf{x};\phi)\right),$$
-which allows to evaluate its derivative without approximation.
+.center.width-80[![](figures/lec11/mnist.png)]
 
 ---
 
@@ -392,77 +356,54 @@ class: middle, center
 
 ---
 
-count: false
 class: middle
 
-# Hierarchical variational auto-encoders
+## A semantically meaningful latent space
+
+The prior-matching term $\text{KL}(q\_\phi(\mathbf{z}|\mathbf{x}) || p(\mathbf{z}))$ enforces simplicity in the latent space, encouraging learned semantic structure and disentanglement.
+
+.center.width-100[![](figures/lec11/latent-space.png)]
+
+.footnote[Credits: [Siddharth Mishra-Sharma](https://smsharma.io/iaifi-summer-school-2023/), 2023.]
 
 ---
 
 class: middle
-
-The prior matching term $\mathbb{E}\_{p(\mathbf{x})}\left[ \text{KL}(q\_\phi(\mathbf{z}|\mathbf{x}) || p(\mathbf{z})) \right]$ limits the expressivity of the model.
-
-Solution: Make $p(\mathbf{z})$ a learnable distribution.
-
-???
-
-Explain the maths on the black board, taking the expectation wrt $p(\mathbf{x})$ of the ELBO and consider the expected KL terms.
-
----
-
-class: middle, black-slide, center
 count: false
 
-.width-80[![](figures/lec12/deeper.jpg)]
+# Diffusion models
 
 ---
 
 class: middle
 
-## (Markovian) Hierarchical VAEs
+.center.width-100[![](figures/lec12/vdm.png)]
 
-The prior $p(\mathbf{z})$ is itself a VAE, and recursively so for its own hyper-prior.
+.footnote[Credits: [Kreis et al](https://cvpr2022-tutorial-diffusion-models.github.io/), 2022.]
+
+---
+
+class: middle
+
+## Markovian Hierarchical VAEs
 
 .center[![](figures/lec12/diagram-hvae.svg)]
 
----
-
-class: middle
-
-Similarly to VAEs, training is done by maximizing the ELBO, using a variational distribution $q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})$ over all levels of latent variables.
-
+Similarly to VAEs, training is done by maximizing the ELBO, using a variational distribution $q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})$ over all levels of latent variables:
 $$\begin{aligned}
-\log p\_\theta(\mathbf{x}) &\geq \mathbb{E}\_{q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})}\left[ \log \frac{p(\mathbf{x},\mathbf{z}\_{1:T})}{q\_\phi(\mathbf{z}\_{1:T}|\mathbf{x})} \right] \\\\
+\log p\_\theta(\mathbf{x}) &\geq \mathbb{E}\_{q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})}\left[ \log \frac{p(\mathbf{x},\mathbf{z}\_{1:T})}{q\_\phi(\mathbf{z}\_{1:T}|\mathbf{x})} \right] 
 \end{aligned}$$
 
 ---
 
 class: middle
-count: false
 
-# Variational diffusion models
+## Diffusion models
 
----
-
-class: middle
-
-.center.width-100[![](figures/lec12/sohl-dickstein2015.png)]
-
----
-
-class: middle
-
-Variational diffusion models are Markovian HVAEs with the following constraints:
+Diffusion models are Markovian HVAEs with the following constraints:
 - The latent dimension is the same as the data dimension.
 - The encoder is fixed to linear Gaussian transitions $q(\mathbf{x}\_t | \mathbf{x}\_{t-1})$.
 - The hyper-parameters are set such that $q(\mathbf{x}_T | \mathbf{x}_0)$ is a standard Gaussian. 
-
-<br>
-
-.center.width-100[![](figures/lec12/vdm.png)]
-
-.footnote[Credits: [Kreis et al](https://cvpr2022-tutorial-diffusion-models.github.io/), 2022.]
 
 ---
 
@@ -490,31 +431,6 @@ Start drawing the full probabilistic graphical model as the forward and reverse 
 class: middle
 
 .center.width-100[![](figures/lec12/vdm-forward2.png)]
-
-.footnote[Credits: [Simon J.D. Prince](https://udlbook.github.io/udlbook/), 2023.]
-
----
-
-class: middle
-
-## Diffusion kernel
-
-.center.width-100[![](figures/lec12/vdm-kernel.png)]
-
-With $\bar{\alpha}\_t = \prod\_{i=1}^t \alpha\_i$ and $\epsilon \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$, we have
-
-$$\begin{aligned}
-\mathbf{x}\_t &= \sqrt{\bar{\alpha}\_t} \mathbf{x}\_{0} + \sqrt{1-\bar{\alpha}\_t} \epsilon \\\\
-q(\mathbf{x}\_t | \mathbf{x}\_{0}) &= \mathcal{N}(\mathbf{x}\_t ; \sqrt{\bar{\alpha}\_t} \mathbf{x}\_{0}, (1-\bar{\alpha}\_t)\mathbf{I})
-\end{aligned}$$
-
-.footnote[Credits: [Kreis et al](https://cvpr2022-tutorial-diffusion-models.github.io/), 2022.]
-
----
-
-class: middle
-
-.center.width-100[![](figures/lec12/diffusion-kernel-1.png)]
 
 .footnote[Credits: [Simon J.D. Prince](https://udlbook.github.io/udlbook/), 2023.]
 
@@ -566,213 +482,44 @@ where
 
 ---
 
-class: middle
+class: middle, center
+count: false
 
-.center[![](figures/lec12/tractable-posterior.svg)]
-
-The distribution $q(\mathbf{x}\_{t-1}|\mathbf{x}\_t, \mathbf{x}\_0)$ is the tractable posterior distribution
-$$\begin{aligned}
-q(\mathbf{x}\_{t-1}|\mathbf{x}\_t, \mathbf{x}\_0) &= \frac{q(\mathbf{x}\_t | \mathbf{x}\_{t-1}, \mathbf{x}\_0) q(\mathbf{x}\_{t-1} | \mathbf{x}\_0)}{q(\mathbf{x}\_t | \mathbf{x}\_0)} \\\\
-&= \mathcal{N}(\mathbf{x}\_{t-1}; \mu\_q(\mathbf{x}\_t, \mathbf{x}\_0, t), \sigma^2\_t I)
-\end{aligned}$$
-where
-$$\begin{aligned}
-\mu\_q(\mathbf{x}\_t, \mathbf{x}\_0, t) &= \frac{\sqrt{\alpha\_t}(1-\bar{\alpha}\_{t-1})}{1-\bar{\alpha}\_t}\mathbf{x}\_t + \frac{\sqrt{\bar{\alpha}\_{t-1}}(1-\alpha\_t)}{1-\bar{\alpha}\_t}\mathbf{x}\_0 \\\\
-\sigma^2\_t &= \frac{(1-\alpha\_t)(1-\bar{\alpha}\_{t-1})}{1-\bar{\alpha}\_t}
-\end{aligned}$$
-
-???
-
-Take the time to do the derivation on the board.
+(Some calculations later...)
 
 ---
 
 class: middle
 
-## Interpretation 1: Denoising
-
-To minimize the expected KL divergence $L\_{t-1}$, we need to match the reverse process $p\_\theta(\mathbf{x}\_{t-1}|\mathbf{x}\_t)$ to the tractable posterior. Since both are Gaussian, we can match their means and variances.
-
-By construction, the variance of the reverse process can be set to the known variance $\sigma^2\_t$ of the tractable posterior.
-
-For the mean, we reuse the analytical form of $\mu\_q(\mathbf{x}\_t, \mathbf{x}\_0, t)$ and parameterize the mean of the reverse process using a .bold[denoising network] as
-$$\mu\_\theta(\mathbf{x}\_t, t) = \frac{\sqrt{\alpha\_t}(1-\bar{\alpha}\_{t-1})}{1-\bar{\alpha}\_t}\mathbf{x}\_t + \frac{\sqrt{\bar{\alpha}\_{t-1}}(1-\alpha\_t)}{1-\bar{\alpha}\_t}\hat{\mathbf{x}}\_\theta(\mathbf{x}\_t, t).$$
-
-???
-
-Derive on the board.
-
----
-
-class: middle
-
-Under this parameterization, the minimization of expected KL divergence $L\_{t-1}$ can be rewritten as
 $$\begin{aligned}
-&\arg \min\_\theta \mathbb{E}\_{q(\mathbf{x}\_t | \mathbf{x}\_0)}\text{KL}(q(\mathbf{x}\_{t-1}|\mathbf{x}\_t, \mathbf{x}\_0) || p\_\theta(\mathbf{x}\_{t-1} | \mathbf{x}\_t) )\\\\
-=&\arg \min\_\theta \mathbb{E}\_{q(\mathbf{x}\_t | \mathbf{x}\_0)} \frac{1}{2\sigma^2\_t} || \mu\_\theta(\mathbf{x}\_t, t) - \mu\_q(\mathbf{x}\_t, \mathbf{x}\_0, t) ||\_2^2 \\\\
+&\arg \min\_\theta L\_{t-1} \\\\
 =&\arg \min\_\theta \mathbb{E}\_{q(\mathbf{x}\_t | \mathbf{x}\_0)} \frac{1}{2\sigma^2\_t} \frac{\bar{\alpha}\_{t-1}(1-\alpha\_t)^2}{(1-\bar{\alpha}\_t)^2} || \hat{\mathbf{x}}\_\theta(\mathbf{x}\_t, t) - \mathbf{x}\_0 ||\_2^2
 \end{aligned}$$
 
-.success[Optimizing a VDM amounts to learning a neural network that predicts the original ground truth $\mathbf{x}\_0$ from a noisy input $\mathbf{x}\_t$.]
+.success[.italic[Interpretation 1: Denoising.] Training a diffusion model amounts to learning a neural network that predicts the original ground truth $\mathbf{x}\_0$ from a noisy input $\mathbf{x}\_t$.]
 
 ---
 
 class: middle
 
-Finally, minimizing the summation of the $L\_{t-1}$ terms across all noise levels $t$ can be approximated by minimizing the expectation over all timesteps as
-$$\arg \min\_\theta \mathbb{E}\_{t \sim U\\{2,T\\}} \mathbb{E}\_{q(\mathbf{x}\_t | \mathbf{x}\_0)}\text{KL}(q(\mathbf{x}\_{t-1}|\mathbf{x}\_t, \mathbf{x}\_0) || p\_\theta(\mathbf{x}\_{t-1} | \mathbf{x}\_t) ).$$
-
----
-
-class: middle
-
-## Interpretation 2: Noise prediction
-
-A second interpretation of VDMs can be obtained using the reparameterization trick. 
-Using $$\mathbf{x}\_0 = \frac{\mathbf{x}\_t - \sqrt{1-\bar{\alpha}\_t} \epsilon}{\sqrt{\bar{\alpha}\_t}},$$
-we can rewrite the mean of the tractable posterior as
 $$\begin{aligned}
-\mu\_q(\mathbf{x}\_t, \mathbf{x}\_0, t) &= \frac{\sqrt{\alpha\_t}(1-\bar{\alpha}\_{t-1})}{1-\bar{\alpha}\_t}\mathbf{x}\_t + \frac{\sqrt{\bar{\alpha}\_{t-1}}(1-\alpha\_t)}{1-\bar{\alpha}\_t}\mathbf{x}\_0 \\\\
-&= \frac{\sqrt{\alpha\_t}(1-\bar{\alpha}\_{t-1})}{1-\bar{\alpha}\_t}\mathbf{x}\_t + \frac{\sqrt{\bar{\alpha}\_{t-1}}(1-\alpha\_t)}{1-\bar{\alpha}\_t}\frac{\mathbf{x}\_t - \sqrt{1-\bar{\alpha}\_t} \epsilon}{\sqrt{\bar{\alpha}\_t}} \\\\
-&= ... \\\\
-&= \frac{1}{\sqrt{\alpha}\_t} \mathbf{x}\_t - \frac{1-\alpha\_t}{\sqrt{(1-\bar{\alpha}\_t)\alpha\_t}}\epsilon
+&\arg \min\_\theta L\_{t-1} \\\\
+=&\arg \min\_\theta \mathbb{E}\_{\mathcal{N}(\epsilon;\mathbf{0}, I)} \frac{1}{2\sigma^2\_t} \frac{(1-\alpha\_t)^2}{(1-\bar{\alpha}\_t) \alpha\_t} || {\epsilon}\_\theta(\underbrace{\sqrt{\bar{\alpha}\_t} \mathbf{x}\_{0} + \sqrt{1-\bar{\alpha}\_t} \epsilon}\_{\mathbf{x}\_t}, t) - \epsilon ||\_2^2 \\\\
+\approx& \arg \min\_\theta \mathbb{E}\_{\mathcal{N}(\epsilon;\mathbf{0}, I)} || {\epsilon}\_\theta(\underbrace{\sqrt{\bar{\alpha}\_t} \mathbf{x}\_{0} + \sqrt{1-\bar{\alpha}\_t} \epsilon}\_{\mathbf{x}\_t}, t) - \epsilon ||\_2^2
 \end{aligned}$$
 
-???
-
-Derive on the board.
+.success[.italic[Interpration 2: Noise prediction.] Training a diffusion model amounts to learning a neural network that predicts the noise $\epsilon$ that was added to the original ground truth $\mathbf{x}\_0$ to obtain the noisy $\mathbf{x}\_t$.]
 
 ---
 
 class: middle
 
-Accordingly, the mean of the reverse process can be parameterized with a .bold[noise-prediction network] as
-
-$$\mu\_\theta(\mathbf{x}\_t, t) = \frac{1}{\sqrt{\alpha}\_t} \mathbf{x}\_t - \frac{1-\alpha\_t}{\sqrt{(1-\bar{\alpha}\_t)\alpha\_t}}{\epsilon}\_\theta(\mathbf{x}\_t, t).$$
-
-Under this parameterization, the minimization of the expected KL divergence $L\_{t-1}$ can be rewritten as
 $$\begin{aligned}
-&\arg \min\_\theta \mathbb{E}\_{q(\mathbf{x}\_t | \mathbf{x}\_0)}\text{KL}(q(\mathbf{x}\_{t-1}|\mathbf{x}\_t, \mathbf{x}\_0) || p\_\theta(\mathbf{x}\_{t-1} | \mathbf{x}\_t) )\\\\
-=&\arg \min\_\theta \mathbb{E}\_{\mathcal{N}(\epsilon;\mathbf{0}, I)} \frac{1}{2\sigma^2\_t} \frac{(1-\alpha\_t)^2}{(1-\bar{\alpha}\_t) \alpha\_t} || {\epsilon}\_\theta(\underbrace{\sqrt{\bar{\alpha}\_t} \mathbf{x}\_{0} + \sqrt{1-\bar{\alpha}\_t} \epsilon}\_{\mathbf{x}\_t}, t) - \epsilon ||_2^2
-\end{aligned}$$
-
-.success[Optimizing a VDM amounts to learning a neural network that predicts the noise $\epsilon$ that was added to the original ground truth $\mathbf{x}\_0$ to obtain the noisy $\mathbf{x}\_t$.]
-
----
-
-class: middle
-
-## Algorithms
-
-.center.width-100[![](figures/lec12/algorithms.png)]
-
-???
-
-Note that in practice, the coefficient before the norm in the loss function is often omitted. Setting it to 1 is found to increase the sample quality.
-
----
-
-class: middle
-
-## Network architectures
-
-Diffusion models often use U-Net architectures with ResNet blocks and self-attention layers to represent $\epsilon\_\theta(\mathbf{x}\_t, t)$.
-
-<br>
-
-.center.width-100[![](figures/lec12/architecture.png)]
-
-.footnote[Credits: [Kreis et al](https://cvpr2022-tutorial-diffusion-models.github.io/), 2022.]
-
----
-
-class: middle
-
-# Score-based generative models
-
----
-
-class: middle
-
-## The score function
-
-The score function $\nabla\_{\mathbf{x}\_0} \log q(\mathbf{x}\_0)$ is a vector field that points in the direction of the highest density of the data distribution $q(\mathbf{x}\_0)$.
-
-It can be used to find modes of the data distribution or to generate samples by Langevin dynamics.
-
-.center.width-40[![](figures/lec12/langevin.gif)]
-
-.footnote[Credits: [Song](https://yang-song.net/blog/2021/score/), 2021.]
-
----
-
-class: middle
-
-## Interpretation 3: Denoising score matching
-
-A third interpretation of VDMs can be obtained by reparameterizing $\mathbf{x}\_0$ using Tweedie's formula, as
-$$\mathbf{x}\_0 = \frac{\mathbf{x}\_t + (1-\bar{\alpha}\_t) \nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t | \mathbf{x}\_0) }{\sqrt{\bar{\alpha}\_t}},$$
-which we can plug into the the mean of the tractable posterior to obtain
-$$\begin{aligned}
-\mu\_q(\mathbf{x}\_t, \mathbf{x}\_0, t) &= \frac{\sqrt{\alpha\_t}(1-\bar{\alpha}\_{t-1})}{1-\bar{\alpha}\_t}\mathbf{x}\_t + \frac{\sqrt{\bar{\alpha}\_{t-1}}(1-\alpha\_t)}{1-\bar{\alpha}\_t}\mathbf{x}\_0 \\\\
-&= ... \\\\
-&= \frac{1}{\sqrt{\alpha}\_t} \mathbf{x}\_t + \frac{1-\alpha\_t}{\sqrt{\alpha\_t}} \nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t | \mathbf{x}\_0).
-\end{aligned}$$
-
-???
-
-Derive on the board.
-
----
-
-class: middle
-
-The mean of the reverse process can be parameterized with a .bold[score network] as
-$$\mu\_\theta(\mathbf{x}\_t, t) = \frac{1}{\sqrt{\alpha}\_t} \mathbf{x}\_t + \frac{1-\alpha\_t}{\sqrt{\alpha\_t}} s\_\theta(\mathbf{x}\_t, t).$$
-
-Under this parameterization, the minimization of the expected KL divergence $L\_{t-1}$ can be rewritten as
-$$\begin{aligned}
-&\arg \min\_\theta \mathbb{E}\_{q(\mathbf{x}\_t | \mathbf{x}\_0)}\text{KL}(q(\mathbf{x}\_{t-1}|\mathbf{x}\_t, \mathbf{x}\_0) || p\_\theta(\mathbf{x}\_{t-1} | \mathbf{x}\_t) )\\\\
+&\arg \min\_\theta L\_{t-1} \\\\
 =&\arg \min\_\theta \mathbb{E}\_{q(\mathbf{x}\_t | \mathbf{x}\_0)} \frac{1}{2\sigma^2\_t} \frac{(1-\alpha\_t)^2}{\alpha\_t} || s\_\theta(\mathbf{x}\_t, t) - \nabla\_{\mathbf{x}\_t}  \log q(\mathbf{x}\_t | \mathbf{x}\_0) ||_2^2
 \end{aligned}$$
 
-.success[Optimizing a score-based model amounts to learning a neural network that predicts the score $\nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t | \mathbf{x}\_0)$  of the tractable posterior.]
-
----
-
-class: middle
-
-Since $s\_\theta(\mathbf{x}\_t, t)$ is learned in expectation over the data distribution $q(\mathbf{x}\_0)$, the score network will eventually approximate the score of the marginal distribution $q(\mathbf{x}\_t$), for each noise level $t$, that is
-$$s\_\theta(\mathbf{x}\_t, t) \approx \nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t).$$
-
----
-
-class: middle
-
-## Ancestral sampling
-
-Sampling from the score-based diffusion model is done by starting from $\mathbf{x}\_T \sim p(\mathbf{x}\_T)=\mathcal{N}(\mathbf{0}, \mathbf{I})$ and then following the estimated reverse Markov chain, as
-$$\mathbf{x}\_{t-1} = \frac{1}{\sqrt{\alpha}\_t} \mathbf{x}\_t + \frac{1-\alpha\_t}{\sqrt{\alpha\_t}} s\_\theta(\mathbf{x}\_t, t) + \sigma\_t \mathbf{z}\_t,$$
-where $\mathbf{z}\_t \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$, for $t=T, ..., 1$. 
-
----
-
-class: middle
-
-## Conditional sampling
-
-To turn a diffusion model $p\_\theta(\mathbf{x}\_{0:T})$ into a conditional model, we can add conditioning information $y$ at each step of the reverse process, as
-$$p\_\theta(\mathbf{x}\_{0:T} | y) = p(\mathbf{x}\_T) \prod\_{t=1}^T p\_\theta(\mathbf{x}\_{t-1} | \mathbf{x}\_t, y).$$
-
----
-
-class: middle
-
-With a score-based model however, we can use the Bayes rule and notice that
-$$\nabla\_{\mathbf{x}\_t} \log p(\mathbf{x}\_t | y) = \nabla\_{\mathbf{x}\_t} \log p(\mathbf{x}\_t) + \nabla\_{\mathbf{x}\_t} \log p(y | \mathbf{x}\_t),$$
-where we leverage the fact that the gradient of $\log p(y)$ with respect to $\mathbf{x}\_t$ is zero.
-
-In other words, controllable generation can be achieved by adding a conditioning signal during sampling, without having to retrain the model. E.g., train an extra classifier $p(y | \mathbf{x}\_t)$ and use it to control the sampling process by adding its gradient to the score.
+.success[.italic[Interpretation 3: Denoising score matching.] Training a diffusion model amounts to learning a neural network that predicts the score $\nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t | \mathbf{x}\_0)$  of the tractable posterior.]
 
 ---
 
@@ -809,6 +556,8 @@ describing the diffusion in the infinitesimal limit.
 
 class: middle
 
+$$\text{d}\mathbf{x}\_t = -\frac{1}{2}\beta(t)\mathbf{x}\_t \text{d}t + \sqrt{\beta(t)} \text{d}\mathbf{w}\_t$$
+
 .center.width-80[![](figures/lec12/perturb_vp.gif)]
 
 .footnote[Credits: [Song](https://yang-song.net/blog/2021/score/), 2021.]
@@ -820,10 +569,6 @@ class: middle
 The reverse process satisfies a reverse-time SDE that can be derived analytically from the forward-time SDE and the score of the marginal distribution $q(\mathbf{x}\_t)$, as
 $$\text{d}\mathbf{x}\_t = \left[ -\frac{1}{2}\beta(t)\mathbf{x}\_t - \beta(t)\nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t) \right] \text{d}t + \sqrt{\beta(t)} \text{d}\mathbf{w}\_t.$$
 
----
-
-class: middle
-
 .center.width-80[![](figures/lec12/denoise_vp.gif)]
 
 .footnote[Credits: [Song](https://yang-song.net/blog/2021/score/), 2021.]
@@ -832,27 +577,168 @@ class: middle
 
 class: middle
 
-The score $\nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t)$ of the marginal diffused density $q(\mathbf{x}\_t)$ is not tractable, but can be estimated using denoising score matching (DSM) by solving
-$$\arg \min\_\theta \mathbb{E}\_{q(\mathbf{x}\_0)} \mathbb{E}\_{t\sim U[0,T]} \mathbb{E}\_{q(\mathbf{x}\_t | \mathbf{x}\_0)} || s\_\theta(\mathbf{x}\_t, t) - \nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t | \mathbf{x}\_0) ||\_2^2,$$
-which will result in $s\_\theta(\mathbf{x}\_t, t) \approx \nabla\_{\mathbf{x}\_t} \log q(\mathbf{x}\_t)$ because of the outer expectation over $q(\mathbf{x}\_0)$.
-
-.success[This is just the .bold[same objective] as for VDMs! (See Interpretation 3)]
+# Normalizing flows
 
 ---
 
 class: middle
 
-## Latent-space diffusion models
+## Change of variables
 
-Directly modeling the data distribution can be make the denoising process difficult to learn. A more effective approach is to combine VAEs with a diffusion prior.
-- The distribution of latent embeddings is simpler to model.
-- Diffusion on non-image data is possible with tailored autoencoders.
+.center.width-80[![](figures/lec10/cubes.png)]
 
-<br>
+Assume $p(\mathbf{z})$ is a uniformly distributed unit cube in $\mathbb{R}^3$ and $\mathbf{x} = f(\mathbf{z}) = 2\mathbf{z}$.
+Since the total probability mass must be conserved, 
+$$p(\mathbf{x}=f(\mathbf{z})) = p(\mathbf{z})\frac{V\_\mathbf{z}}{V\_\mathbf{x}}=p(\mathbf{z}) \frac{1}{8},$$
+where $\frac{1}{8} = \left| \det \left( \begin{matrix}
+2 & 0 & 0 \\\\ 
+0 & 2 & 0 \\\\
+0 & 0 & 2
+\end{matrix} \right)\right|^{-1}$ represents the inverse determinant of the linear transformation $f$.
 
-.center.width-100[![](figures/lec12/lsgm.png)]
+???
 
-.footnote[Credits: [Vahdat et al](https://nvlabs.github.io/LSGM/), 2021.]
+Motivate that picking a parametric family of distributions is not always easy. We want something more flexible.
+
+---
+
+class: middle
+
+What if $f$ is non-linear?
+
+.center.width-70[![](figures/lec10/cov.png)]
+
+.footnote[Image credits: Simon J.D. Prince, [Understanding Deep Learning](https://udlbook.github.io/udlbook/), 2023.]
+
+---
+
+class: middle
+
+## Change of variables theorem
+
+If $f$ is non-linear,
+- the Jacobian $J\_f(\mathbf{z})$ of $\mathbf{x} = f(\mathbf{z})$ represents the infinitesimal linear transformation in the neighborhood of $\mathbf{z}$;
+- if the function is a bijective map, then the mass must be conserved locally.
+
+Therefore, the local change of density yields
+$$p(\mathbf{x}=f(\mathbf{z})) = p(\mathbf{z})\left| \det J\_f(\mathbf{z}) \right|^{-1}.$$
+
+Similarly, for $g = f^{-1}$, we have $$p(\mathbf{x})=p(\mathbf{z}=g(\mathbf{x}))\left| \det J\_g(\mathbf{x}) \right|.$$
+
+???
+
+The Jacobian matrix of a function f: R^n -> R^m at a point z in R^n is an m x n matrix that represents the linear transformation induced by the function at that point. Geometrically, the Jacobian matrix can be thought of as a matrix of partial derivatives that describes how the function locally stretches or shrinks areas and volumes in the vicinity of the point z.
+
+The determinant of the Jacobian matrix of f at z has a geometric interpretation as the factor by which the function locally scales areas or volumes. Specifically, if the determinant is positive, then the function locally expands areas and volumes, while if it is negative, the function locally contracts areas and volumes. The absolute value of the determinant gives the factor by which the function scales the areas or volumes.
+
+---
+
+class: middle
+
+## Example: coupling layers 
+
+Assume $\mathbf{z} = (\mathbf{z}\_a, \mathbf{z}\_b)$ and $\mathbf{x} = (\mathbf{x}\_a, \mathbf{x}\_b)$. Then,
+- Forward mapping $\mathbf{x} = f(\mathbf{z})$: 
+$$\mathbf{x}\_a = \mathbf{z}\_a, \quad \mathbf{x}\_b = \mathbf{z}\_b \odot \exp(s(\mathbf{z}\_a)) + t(\mathbf{z}\_a),$$
+- Inverse mapping $\mathbf{z} = g(\mathbf{x})$:
+$$\mathbf{z}\_a = \mathbf{x}\_a, \quad \mathbf{z}\_b = (\mathbf{x}\_b - t(\mathbf{x}\_a)) \odot \exp(-s(\mathbf{x}\_a)),$$
+
+where $s$ and $t$ are arbitrary neural networks.
+
+---
+
+class: middle
+
+For $\mathbf{x} = (\mathbf{x}\_a, \mathbf{x}\_b)$, the log-likelihood is
+$$\begin{aligned}\log p(\mathbf{x}) &= \log p(\mathbf{z}) \left| \det J\_f(\mathbf{z}) \right|^{-1}\end{aligned}$$
+where the Jacobian $J\_f(\mathbf{z}) = \frac{\partial \mathbf{x}}{\partial \mathbf{z}}$ is a lower triangular matrix $$\left( \begin{matrix}
+\mathbf{I} & 0 \\\\
+\frac{\partial \mathbf{x}\_b}{\partial \mathbf{z}\_a} & \text{diag}(\exp(s(\mathbf{z}\_a))) \end{matrix} \right),$$
+such that $\left| \det J\_f(\mathbf{z}) \right| = \prod\_i \exp(s(\mathbf{z}\_a))\_i = \exp(\sum\_i s(\mathbf{z}\_a)\_i)$.
+
+Therefore, the log-likelihood is
+$$\begin{aligned}\log p(\mathbf{x}) &= \log p(\mathbf{z}) - \sum\_i s(\mathbf{z}\_a)\_i\end{aligned}$$
+
+---
+
+class: middle 
+
+## Normalizing flows
+
+A normalizing flow is a change of variable $f$ that transforms a base distribution $p(\mathbf{z})$ into $p(\mathbf{x})$ through a discrete sequence of invertible transformations.
+
+.center.width-100[![](figures/lec10/normalizing-flow.png)]
+
+.footnote[Image credits: [Lilian Weng](https://lilianweng.github.io/lil-log/2018/10/13/flow-based-deep-generative-models), 2018.]
+
+---
+
+class: middle
+
+Formally, 
+$$\begin{aligned}
+&\mathbf{z}\_0 \sim p(\mathbf{z}) \\\\
+&\mathbf{z}\_k = f\_k(\mathbf{z}\_{k-1}), \quad k=1,...,K \\\\
+&\mathbf{x} = \mathbf{z}\_K = f\_K \circ ... \circ f\_1(\mathbf{z}\_0).
+\end{aligned}$$
+
+The change of variable theorem yields
+$$\log p(\mathbf{x}) = \log p(\mathbf{z}\_0) - \sum\_{k=1}^K \log \left| \det J\_{f\_k}(\mathbf{z}\_{k-1}) \right|.$$
+
+---
+
+class: middle
+
+.center.width-90[![](figures/lec10/nf-densities.png)]
+
+.center[Normalizing flows can fit complex multimodal discontinuous densities.]
+
+.footnote[Image credits: [Wehenkel and Louppe](https://arxiv.org/abs/1908.05164), 2019.]
+
+---
+
+class: middle
+
+## Continuous-time normalizing flows
+
+.grid[
+.kol-1-2[
+Replace the discrete sequence of transformations with a neural ODE with reversible dynamics such that
+$$\begin{aligned}
+&\mathbf{z}\_0 \sim p(\mathbf{z})\\\\
+&\frac{d\mathbf{z}(t)}{dt} = f(\mathbf{z}(t), t, \theta)\\\\
+&\mathbf{x} = \mathbf{z}(1) = \mathbf{z}\_0 + \int\_0^1 f(\mathbf{z}(t), t) dt.
+\end{aligned}$$
+]
+.kol-1-2.center[
+<video autoplay muted loop width="80%">
+     <source src="./figures/lec10/ffjord.mp4" type="video/mp4">
+</video>
+]
+]
+
+The instantaneous change of variable yields
+$$\log p(\mathbf{x}) = \log p(\mathbf{z}(0)) - \int\_0^1 \text{Tr} \left( \frac{\partial f(\mathbf{z}(t), t, \theta)}{\partial \mathbf{z}(t)} \right) dt.$$
+
+.footnote[Image credits: [Grathwohl et al](https://arxiv.org/abs/1810.01367), 2018.]
+
+---
+
+class: middle
+
+
+
+## Probability flow ODE
+
+.italic[Back to diffusion:] For any diffusion process, there exists a corresponding deterministic process 
+$$\text{d}\mathbf{x}\_t = \left[ \mathbf{f}(t, \mathbf{x}\_t) - \frac{1}{2} g^2(t) \nabla\_{\mathbf{x}\_t} \log p(\mathbf{x}\_t) \right] \text{d}t$$
+whose trajectories share the same marginal densities $p(\mathbf{x}\_t)$.
+
+Therefore, when $\nabla\_{\mathbf{x}\_t} \log p(\mathbf{x}\_t)$ is replaced by its approximation $s\_\theta(\mathbf{x}\_t, t)$, the probability flow ODE becomes a special case of a neural ODE. In particular, it is an example of continuous-time normalizing flows!
+
+.center.width-80[![](figures/lec10/flow-ode.jpg)]
+
+.footnote[Credits: [Song](https://yang-song.net/blog/2021/score/), 2021.]
 
 ---
 
@@ -870,6 +756,7 @@ The end.
 ]
 
 .footnote[Credits: [Blattmann et al](https://research.nvidia.com/labs/toronto-ai/VideoLDM/), 2023. Prompt: "A teddy bear is playing the electric guitar, high definition, 4k."]
+
 
 
 
