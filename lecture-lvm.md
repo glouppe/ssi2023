@@ -547,6 +547,21 @@ $$\begin{aligned}
 
 class: middle
 
+## Network architectures
+
+Diffusion models often use U-Net architectures with ResNet blocks and self-attention layers to represent $\hat{\mathbf{x}}\_\theta(\mathbf{x}\_t, t)$, $\epsilon\_\theta(\mathbf{x}\_t, t)$ or $s\_\theta(\mathbf{x}\_t, t)$.
+
+<br>
+
+.center.width-100[![](figures/lec12/architecture.png)]
+
+.footnote[Credits: [Kreis et al](https://cvpr2022-tutorial-diffusion-models.github.io/), 2022.]
+
+
+---
+
+class: middle
+
 ## Continuous-time diffusion models
 
 .center.width-100[![](figures/lec12/vdm-forward.png)]
