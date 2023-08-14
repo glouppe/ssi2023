@@ -18,10 +18,10 @@ Gilles Louppe<br>
 
 # Outline
 
-- Deep generative models
-- Variational auto-encoders
-- Diffusion models
-- Normalizing flows
+1. Deep generative models
+2. Variational auto-encoders
+3. Diffusion models
+4. Normalizing flows
 
 ---
 
@@ -37,9 +37,10 @@ class: middle
 ## Generative models
 
 A (deep) **generative model** is a probabilistic model $p\_\theta$ that can be used as a simulator of the data. 
+
 Formally, a generative model defines a probability distribution $p\_\theta(\mathbf{x})$ over the data $\mathbf{x} \in \mathcal{X}$, parameterized by $\theta$. 
 
-.center.width-70[![](figures/lec11/distribution.png)]
+.center.width-60[![](figures/lec11/distribution.png)]
 
 ???
 
@@ -47,7 +48,7 @@ Our goal is to learn $\theta$ to match the (unknown) data distribution $p(\mathb
 
 ---
 
-class: middle
+class: middle, black-slide
 
 .grid[
 .kol-1-2.center[
@@ -86,7 +87,7 @@ class: middle
 
 ## Simulators
 
-A simulator prescribes a generative model that can be used to simulate data $\mathbf{x}$.
+A simulator prescribes a generative model that can be used to simulate data $\mathbf{x}$. 
 
 .center.width-100[![](figures/lec11/simulators.png)]
 
@@ -98,7 +99,7 @@ class: middle
 
 ## Conditional simulators
 
-A conditional simulator prescribes a way to sample from the likelihood $p(\mathbf{x}|\theta)$, where $\theta$ is a set of conditioning variables or parameters.
+A conditional simulator prescribes a way to sample from the likelihood $p(\mathbf{x}|\vartheta)$, where $\vartheta$ is a set of conditioning variables or parameters.
 
 .center.width-100[![](figures/lec11/simulators-conditional.png)]
 
@@ -108,7 +109,7 @@ A conditional simulator prescribes a way to sample from the likelihood $p(\mathb
 
 class: middle
 
-$$p(z\_p|\theta)$$
+$$p(z\_p|\vartheta)$$
 
 .width-100[![](figures/sbi/process1.png)]
 
@@ -121,7 +122,7 @@ generation: pencil and paper calculable from first principles
 count: false
 class: middle
 
-$$p(z\_s|\theta) = \int p(z\_p|\theta) p(z\_s | z\_p) dz\_p$$
+$$p(z\_s|\vartheta) = \int p(z\_p|\vartheta) p(z\_s | z\_p) dz\_p$$
 
 .width-100[![](figures/sbi/process2.png)]
 
@@ -134,7 +135,7 @@ parton shower + hadronization: controlled approximation of first principles + ph
 count: false
 class: middle
 
-$$p(z\_d|\theta) = \iint p(z\_p|\theta) p(z\_s | z\_p) p(z\_d | z\_s) dz\_p dz\_s$$
+$$p(z\_d|\vartheta) = \iint p(z\_p|\vartheta) p(z\_s | z\_p) p(z\_d | z\_s) dz\_p dz\_s$$
 
 .width-100[![](figures/sbi/process3.png)]
 
@@ -147,7 +148,7 @@ detector simulation: interaction with the materials and digitization
 count: false
 class: middle
 
-$$p(x|\theta) = \iiint p(z\_p|\theta) p(z\_s | z\_p) p(z\_d | z\_s) p(x|z\_d) dz\_p dz\_s dx$$
+$$p(x|\vartheta) = \iiint p(z\_p|\vartheta) p(z\_s | z\_p) p(z\_d | z\_s) p(x|z\_d) dz\_p dz\_s dx$$
 
 .width-100[![](figures/sbi/process4.png)]
 
@@ -164,11 +165,11 @@ class: middle
 .grid[
 .kol-1-3.center[
 
-Produce samples $$\mathbf{x} \sim p(\mathbf{x} | \theta)$$
+Produce samples $$\mathbf{x} \sim p(\mathbf{x} | \vartheta)$$
 
 ]
 .kol-1-3.center[
-Evaluate densities $$p(\mathbf{x}|\theta)$$ $$p(\theta | \mathbf{x}) = \frac{p(\mathbf{x} | \theta) p(\theta)}{p(\mathbf{x})}$$
+Evaluate densities $$p(\mathbf{x}|\vartheta)$$ $$p(\vartheta | \mathbf{x}) = \frac{p(\mathbf{x} | \vartheta) p(\vartheta)}{p(\mathbf{x})}$$
 
 ]
 .kol-1-3.center[
@@ -392,6 +393,10 @@ class: middle
 ## Markovian Hierarchical VAEs
 
 .center[![](figures/lec12/diagram-hvae.svg)]
+
+---
+
+class: middle
 
 Similarly to VAEs, training is done by maximizing the ELBO, using a variational distribution $q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})$ over all levels of latent variables:
 $$\begin{aligned}

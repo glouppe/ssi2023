@@ -72,12 +72,12 @@ class: middle
 
 # Outline
 
-- Part 1: Simulation-based inference
-- Part 2: Algorithms
+1. Simulation-based inference
+2. Algorithms
     - Neural ratio estimation
     - Neural posterior estimation 
     - Neural score estimation
-- Part 3: Diagnostics
+3. Diagnostics
 
 ???
 
@@ -375,7 +375,7 @@ A normalizing flow is a sequence of invertible transformations $f\_k$ that map a
 .center.width-100[![](./figures/sbi/normalizing-flow.png)]
 
 By the change of variables formula, the log-likelihood of a sample $x$ is given by
-$$\log p\_K(x) = \log p\_0(z) - \sum\_{k=1}^K \log \left| \det \frac{\partial f\_k}{\partial z\_{k-1}} \right|.$$
+$$\log p(\mathbf{x}) = \log p(\mathbf{z}\_0) - \sum\_{k=1}^K \log \left| \det J\_{f\_k}(\mathbf{z}\_{k-1}) \right|.$$
 
 ---
 
