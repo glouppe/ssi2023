@@ -5,14 +5,14 @@ class: middle, center, title-slide
 
 <br>
 
-51st SLAC Summer Institute
-
+51st SLAC Summer Institute<br>
 August 15, 2023
 
 <br>
 
 Gilles Louppe<br>
-[g.louppe@uliege.be](mailto:g.louppe@uliege.be)
+[g.louppe@uliege.be](mailto:g.louppe@uliege.be)<br>
+[@glouppe](https://twitter.com/glouppe)
 
 ---
 
@@ -85,7 +85,7 @@ background-size: contain
 
 class: middle
 
-## Simulators
+## Simulators as generative models
 
 A simulator prescribes a generative model that can be used to simulate data $\mathbf{x}$. 
 
@@ -396,34 +396,6 @@ class: middle
 
 class: middle
 
-## Markovian Hierarchical VAEs
-
-.center[![](figures/lec12/diagram-hvae.svg)]
-
----
-
-class: middle
-
-Similarly to VAEs, training is done by maximizing the ELBO, using a variational distribution $q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})$ over all levels of latent variables:
-$$\begin{aligned}
-\log p\_\theta(\mathbf{x}) &\geq \mathbb{E}\_{q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})}\left[ \log \frac{p(\mathbf{x},\mathbf{z}\_{1:T})}{q\_\phi(\mathbf{z}\_{1:T}|\mathbf{x})} \right] 
-\end{aligned}$$
-
----
-
-class: middle
-
-## Diffusion models
-
-Diffusion models are Markovian HVAEs with the following constraints:
-- The latent dimension is the same as the data dimension.
-- The encoder is fixed to linear Gaussian transitions $q(\mathbf{x}\_t | \mathbf{x}\_{t-1})$.
-- The hyper-parameters are set such that $q(\mathbf{x}_T | \mathbf{x}_0)$ is a standard Gaussian. 
-
----
-
-class: middle
-
 ## Forward diffusion process
 
 .center.width-100[![](figures/lec12/vdm-forward.png)]
@@ -466,6 +438,32 @@ p\_\theta(\mathbf{x}\_{t-1} | \mathbf{x}\_t) &= \mathcal{N}(\mathbf{x}\_{t-1}; \
 with $\mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$.
 
 .footnote[Credits: [Kreis et al](https://cvpr2022-tutorial-diffusion-models.github.io/), 2022.]
+
+---
+
+class: middle
+
+## Markovian Hierarchical VAEs
+
+.center[![](figures/lec12/diagram-hvae.svg)]
+
+---
+
+class: middle
+
+Similarly to VAEs, training is done by maximizing the ELBO, using a variational distribution $q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})$ over all levels of latent variables:
+$$\begin{aligned}
+\log p\_\theta(\mathbf{x}) &\geq \mathbb{E}\_{q\_\phi(\mathbf{z}\_{1:T} | \mathbf{x})}\left[ \log \frac{p(\mathbf{x},\mathbf{z}\_{1:T})}{q\_\phi(\mathbf{z}\_{1:T}|\mathbf{x})} \right] 
+\end{aligned}$$
+
+---
+
+class: middle
+
+Diffusion models are Markovian HVAEs with the following constraints:
+- The latent dimension is the same as the data dimension.
+- The encoder is fixed to linear Gaussian transitions $q(\mathbf{x}\_t | \mathbf{x}\_{t-1})$.
+- The hyper-parameters are set such that $q(\mathbf{x}_T | \mathbf{x}_0)$ is a standard Gaussian. 
 
 ---
 
@@ -624,7 +622,7 @@ class: middle
 
 Assume $p(\mathbf{z})$ is a uniformly distributed unit cube in $\mathbb{R}^3$ and $\mathbf{x} = f(\mathbf{z}) = 2\mathbf{z}$.
 Since the total probability mass must be conserved, 
-$$p(\mathbf{x}=f(\mathbf{z})) = p(\mathbf{z})\frac{V\_\mathbf{z}}{V\_\mathbf{x}}=p(\mathbf{z}) \frac{1}{8},$$
+$$p(\mathbf{x})=p(\mathbf{x}=f(\mathbf{z})) = p(\mathbf{z})\frac{V\_\mathbf{z}}{V\_\mathbf{x}}=p(\mathbf{z}) \frac{1}{8},$$
 where $\frac{1}{8} = \left| \det \left( \begin{matrix}
 2 & 0 & 0 \\\\ 
 0 & 2 & 0 \\\\

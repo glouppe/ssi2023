@@ -4,14 +4,14 @@ class: middle, center, title-slide
 
 <br>
 
-51st SLAC Summer Institute
-
-August 16, 2023
+51st SLAC Summer Institute<br>
+August 15, 2023
 
 <br>
 
 Gilles Louppe<br>
-[g.louppe@uliege.be](mailto:g.louppe@uliege.be)
+[g.louppe@uliege.be](mailto:g.louppe@uliege.be)<br>
+[@glouppe](https://twitter.com/glouppe)
 
 ---
 
