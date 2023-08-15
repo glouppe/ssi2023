@@ -304,7 +304,7 @@ class: middle
 
 ## Variational auto-encoders
 
-.center.width-80[![](figures/lec11/vae-architecture.png)]
+.center.width-100[![](figures/lec11/vae-architecture.png)]
 
 ???
 
@@ -350,6 +350,12 @@ class: middle
 Consider as data $\mathbf{d}$ the MNIST digit dataset:
 
 .center.width-80[![](figures/lec11/mnist.png)]
+
+---
+
+class: middle
+
+.center.width-90[![](figures/lec11/vae-architecture-mnist.png)]
 
 ---
 
